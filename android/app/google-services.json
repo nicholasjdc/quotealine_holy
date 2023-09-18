@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "14126510268",
+    "project_id": "quotealine-67587",
+    "storage_bucket": "quotealine-67587.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:14126510268:android:d29864b701b55139e4e0b9",
+        "android_client_info": {
+          "package_name": "com.example.quotealine_holy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgPTPpicQvZw_T3QhseOhxlee4wvojlY0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
