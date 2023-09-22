@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quotealine_holy/screens/login_page.dart';
+import 'package:quotealine_holy/screens/quote_page.dart';
 import 'package:quotealine_holy/utils/fire_auth.dart';
+import 'package:quotealine_holy/base_classes/quote.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
@@ -17,6 +19,8 @@ class _ProfilePageState extends State<ProfilePage> {
   bool _isSigningOut = false;
 
   late User _currentUser;
+  Quote testQuote = Quote.fromMap(
+      {'quoteID': 'lovelydays', 'quote': 'sadbad', 'parentFolderID': 'okokok'});
 
   @override
   void initState() {
@@ -60,6 +64,15 @@ class _ProfilePageState extends State<ProfilePage> {
                         .copyWith(color: Colors.red),
                   ),
             const SizedBox(height: 16.0),
+            ElevatedButton(
+                onPressed: () => {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => QuotePage('Nick'),
+                        ),
+                      )
+                    },
+                child: const Text('To QuotePage')),
             _isSendingVerification
                 ? const CircularProgressIndicator()
                 : Row(
@@ -120,6 +133,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => {testQuote.addQuote(testQuote)},
+        tooltip: 'Add Quote',
+        child: const Icon(Icons.add),
       ),
     );
   }
