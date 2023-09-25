@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 24.0),
                       child: Text(
-                        'Login',
+                        'Quotealine',
                         style: Theme.of(context).textTheme.displayLarge,
                       ),
                     ),

@@ -1,16 +1,6 @@
-# quotealine_holy
+Welcome to Quotealine!
+This is a cloud-based quote-storage app to help friends and social groups share and organize quotes. Users are able to create and join different quote groups that have a shared quote list.
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The application is developed using Flutter as the front and back-end and Firebase as the database. We are currently operating on the free Firebase plan (Spark), but plan to move to Blaze (1st paid tier) if we exceed the costs of Spark. We also plan to buy a quotealine domain to allow web usage. This is a work in progress, the roadmap can be seen in the todom.md file. Please feel free to borrow and use any code seen here. 
+Many Thanks,
+Nicholasjdc

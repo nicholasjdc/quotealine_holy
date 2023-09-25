@@ -3,33 +3,36 @@ import 'package:flutter/rendering.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
-import 'package:quotealine_holy/base_classes/quote.dart';
+import 'package:quotealine_holy/base_classes/folder.dart';
+import 'package:quotealine_holy/screens/quote_page.dart';
 
-class QuotePage extends StatelessWidget {
+class FolderPage extends StatelessWidget {
   final String currUserID;
-  final CollectionReference cr;
-  QuotePage(this.currUserID, this.cr);
+  FolderPage(this.currUserID);
 
   @override
   Widget build(BuildContext context) {
-    return PostList(currUserID, cr);
+    return PostList(currUserID);
   }
 }
+
+Map<String, dynamic> testMap = {
+  'haha hoho': 'hehe haha',
+};
 
 // return a card template widget
 class PostList extends StatefulWidget {
   final String currUserID;
-  final CollectionReference cr;
-  PostList(this.currUserID, this.cr);
+  PostList(this.currUserID);
 
   @override
   _PostListState createState() => _PostListState();
 }
 
 class _PostListState extends State<PostList> {
-  late TextEditingController quoteContentController;
-  late Stream<QuerySnapshot> quoteStream;
+  late Stream<QuerySnapshot> folderStream;
+  late TextEditingController addFoldercontroller;
+  late String routeToFolderCollection;
 
   @override
   void initState() {
@@ -52,7 +55,7 @@ class _PostListState extends State<PostList> {
           .get();
     } else {
       setState(() {
-        quoteStream = Stream.empty();
+        folderStream = Stream.empty();
       });
       return;
     }
@@ -65,13 +68,17 @@ class _PostListState extends State<PostList> {
 
     // otherwise, use the current users faved tags to filter for posts that contain
     // corresponding tagIDs
-    Stream<QuerySnapshot> filteredStream = widget.cr.snapshots();
+    Stream<QuerySnapshot> filteredStream =
+        FirebaseFirestore.instance.collection('folders').snapshots();
 
     setState(() {
-      quoteStream = filteredStream;
+      folderStream = filteredStream;
     });
     setState(() {
-      quoteContentController = TextEditingController();
+      addFoldercontroller = TextEditingController();
+    });
+    setState(() {
+      routeToFolderCollection = "folders";
     });
   }
 
@@ -81,7 +88,7 @@ class _PostListState extends State<PostList> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
-        stream: quoteStream,
+        stream: folderStream,
         // stream: Firestore.instance.collection('posts').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -111,41 +118,50 @@ class _PostListState extends State<PostList> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => addQuoteDialog(),
+        onPressed: () => addFolderDialog(),
         tooltip: 'Add Folder',
         child: const Icon(Icons.add),
       ),
     );
   }
 
-  addQuoteDialog() async {
+  addFolderDialog() async {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("New Quote"),
+        title: Text("New Folder"),
         content: TextField(
-          decoration: InputDecoration(
-              hintText: "I am become death, destroyer of worlds"),
-          controller: quoteContentController,
+          decoration: InputDecoration(hintText: "Folder Name"),
+          controller: addFoldercontroller,
         ),
         actions: [
           TextButton(
             child: Text('Submit'),
-            onPressed: () => submitAddQuoteDialog(quoteContentController.text),
+            onPressed: () => submitAddFolderDialog(addFoldercontroller.text),
           )
         ],
       ),
     );
   }
 
-  submitAddQuoteDialog(String quoteContent) async {
-    Quote testQuote = Quote.fromMap({
-      'quoteID': 'lovelyFolderID',
-      'quote': quoteContent,
+  submitAddFolderDialog(String folderName) async {
+    Folder testFolder = Folder.fromMap({
+      'folderID': 'lovelyFolderID',
+      'folderName': folderName,
       'parentFolderID': 'lovelyParentFolderID',
+      'folderContents': testMap,
     });
-    widget.cr.add(testQuote.toMap());
+    FirebaseFirestore.instance
+        .collection(routeToFolderCollection)
+        .add(testFolder.toMap());
     Navigator.of(context).pop();
+  }
+
+  CollectionReference createRoute(
+      String collectionName, DocumentReference currentDoc) {
+    final CollectionReference finalRef = currentDoc.collection(collectionName);
+
+    return finalRef;
   }
 
   Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshots) {
@@ -158,7 +174,17 @@ class _PostListState extends State<PostList> {
           return PostItem(
               context, snapshots[index], widget.currUserID, false, UniqueKey());
               */
-          return ListTile(title: Text(snapshots[index]['quote']));
+          return ListTile(
+            title: Text(snapshots[index]['folderName']),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => QuotePage(
+                  'Nick',
+                  createRoute("quotes", snapshots[index].reference),
+                ),
+              ),
+            ), //onTap
+          );
         });
   }
 }

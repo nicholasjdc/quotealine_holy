@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:quotealine_holy/screens/folder_page.dart';
 import 'package:quotealine_holy/screens/login_page.dart';
 import 'package:quotealine_holy/screens/quote_page.dart';
 import 'package:quotealine_holy/utils/fire_auth.dart';
@@ -68,11 +69,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 onPressed: () => {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => QuotePage('Nick'),
+                          builder: (context) => FolderPage('Nick'),
                         ),
                       )
                     },
-                child: const Text('To QuotePage')),
+                child: const Text('To FolderPage')),
+            const SizedBox(height: 16.0),
             _isSendingVerification
                 ? const CircularProgressIndicator()
                 : Row(
