@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:quotealine_holy/base_classes/quote_user.dart';
 import 'package:quotealine_holy/screens/folder_page.dart';
 import 'package:quotealine_holy/screens/login_page.dart';
-import 'package:quotealine_holy/screens/quote_page.dart';
 import 'package:quotealine_holy/utils/fire_auth.dart';
 import 'package:quotealine_holy/base_classes/quote.dart';
 
@@ -20,6 +20,8 @@ class _ProfilePageState extends State<ProfilePage> {
   bool _isSigningOut = false;
 
   late User _currentUser;
+  QuoteUser testQuoteUser = QuoteUser.fromMap(
+      {'userID': 'abc', 'username': 'whatever', 'joinedFolders': []});
   Quote testQuote = Quote.fromMap(
       {'quoteID': 'lovelydays', 'quote': 'sadbad', 'parentFolderID': 'okokok'});
 
@@ -69,7 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 onPressed: () => {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => FolderPage('Nick'),
+                          builder: (context) => FolderPage(_currentUser.uid),
                         ),
                       )
                     },

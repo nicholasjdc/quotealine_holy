@@ -38,7 +38,13 @@ Current Roadmap:
 12. Introduce Mod privileges, allowing creators of a Folder to delete posts or ban members (FOLDER, QUTOES, USER)
 
 Currently in Progress:
-- Creating Folder Class
-- Implementing Folder class in Firebase
-- Creating folder screen
-- Testing creation and display of folders
+- Creating Folder Class x
+- Implementing Folder class in Firebase x
+- Creating folder screen x
+- Testing creation and display of folders x
+- Sync Quotes with Folders x
+- Sync Users with Folders
+- Enable more fields for quote creation
+- Prettify folders
+- Prettify quotes
+- Deploy

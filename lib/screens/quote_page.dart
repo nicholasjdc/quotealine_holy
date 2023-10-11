@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
-
-import 'package:flutter/services.dart';
 import 'package:quotealine_holy/base_classes/quote.dart';
 
 class QuotePage extends StatelessWidget {
   final String currUserID;
   final CollectionReference cr;
-  QuotePage(this.currUserID, this.cr);
+  const QuotePage(this.currUserID, this.cr, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +18,7 @@ class QuotePage extends StatelessWidget {
 class PostList extends StatefulWidget {
   final String currUserID;
   final CollectionReference cr;
-  PostList(this.currUserID, this.cr);
+  const PostList(this.currUserID, this.cr, {super.key});
 
   @override
   _PostListState createState() => _PostListState();
@@ -86,8 +83,9 @@ class _PostListState extends State<PostList> {
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             if (snapshot.connectionState == ConnectionState.none ||
-                snapshot.connectionState == ConnectionState.waiting)
+                snapshot.connectionState == ConnectionState.waiting) {
               return Container();
+            }
             //     // return SizedBox(
             //     //     width: 20, height: 20, child: CircularProgressIndicator());
             //     return Center(
@@ -95,8 +93,9 @@ class _PostListState extends State<PostList> {
             //       color: Colors.white,
             //       size: 100.0,
             //     ));
-            if (snapshot.connectionState == ConnectionState.done)
+            if (snapshot.connectionState == ConnectionState.done) {
               return Container();
+            }
             //   // return CircularProgressIndicator();
             //   return Center(
             //     child: SpinKitFadingCube(
@@ -122,15 +121,15 @@ class _PostListState extends State<PostList> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("New Quote"),
+        title: const Text("New Quote"),
         content: TextField(
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
               hintText: "I am become death, destroyer of worlds"),
           controller: quoteContentController,
         ),
         actions: [
           TextButton(
-            child: Text('Submit'),
+            child: const Text('Submit'),
             onPressed: () => submitAddQuoteDialog(quoteContentController.text),
           )
         ],

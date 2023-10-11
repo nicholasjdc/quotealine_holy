@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
@@ -8,7 +7,7 @@ import 'package:quotealine_holy/screens/quote_page.dart';
 
 class FolderPage extends StatelessWidget {
   final String currUserID;
-  FolderPage(this.currUserID);
+  const FolderPage(this.currUserID, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,7 @@ Map<String, dynamic> testMap = {
 // return a card template widget
 class PostList extends StatefulWidget {
   final String currUserID;
-  PostList(this.currUserID);
+  const PostList(this.currUserID, {super.key});
 
   @override
   _PostListState createState() => _PostListState();
@@ -93,8 +92,9 @@ class _PostListState extends State<PostList> {
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             if (snapshot.connectionState == ConnectionState.none ||
-                snapshot.connectionState == ConnectionState.waiting)
+                snapshot.connectionState == ConnectionState.waiting) {
               return Container();
+            }
             //     // return SizedBox(
             //     //     width: 20, height: 20, child: CircularProgressIndicator());
             //     return Center(
@@ -102,8 +102,9 @@ class _PostListState extends State<PostList> {
             //       color: Colors.white,
             //       size: 100.0,
             //     ));
-            if (snapshot.connectionState == ConnectionState.done)
+            if (snapshot.connectionState == ConnectionState.done) {
               return Container();
+            }
             //   // return CircularProgressIndicator();
             //   return Center(
             //     child: SpinKitFadingCube(
@@ -129,14 +130,14 @@ class _PostListState extends State<PostList> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("New Folder"),
+        title: const Text("New Folder"),
         content: TextField(
-          decoration: InputDecoration(hintText: "Folder Name"),
+          decoration: const InputDecoration(hintText: "Folder Name"),
           controller: addFoldercontroller,
         ),
         actions: [
           TextButton(
-            child: Text('Submit'),
+            child: const Text('Submit'),
             onPressed: () => submitAddFolderDialog(addFoldercontroller.text),
           )
         ],
@@ -183,7 +184,7 @@ class _PostListState extends State<PostList> {
                   createRoute("quotes", snapshots[index].reference),
                 ),
               ),
-            ), //onTap
+            ),
           );
         });
   }

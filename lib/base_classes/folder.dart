@@ -25,7 +25,7 @@ class Folder implements BaseModel {
     DocumentReference docRef = await FirebaseFirestore.instance
         .collection(routeToCollection)
         .add(folder.toMap());
-    docRef.collection('quotes').add(initFolderContents);
+    docRef.collection('quotes');
   }
 
   Future<Folder> getFolder(String id) async {

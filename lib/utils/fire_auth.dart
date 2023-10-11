@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:quotealine_holy/base_classes/quote_user.dart';
 
 class FireAuth {
   static Future<User?> registerUsingEmailPassword({
@@ -17,6 +18,11 @@ class FireAuth {
       user = userCredential.user;
       await user!.updateProfile(displayName: name);
       await user.reload();
+      await createQuoteUserWithEmailAndPassword({
+        'userID': user.uid,
+        'username': name,
+        'joinedFolders': [] as List<String>
+      });
       user = auth.currentUser;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -28,6 +34,12 @@ class FireAuth {
       print(e);
     }
     return user;
+  }
+
+  static Future<QuoteUser?> createQuoteUserWithEmailAndPassword(data) async {
+    QuoteUser currQuoteUser = QuoteUser.fromMap(data);
+    await currQuoteUser.addUser(currQuoteUser);
+    return currQuoteUser;
   }
 
   static Future<User?> signInUsingEmailPassword({
