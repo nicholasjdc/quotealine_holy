@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:quotealine_holy/base_classes/quote_user.dart';
 import 'dart:async';
-
+import 'package:uuid/uuid.dart';
 import 'package:quotealine_holy/base_classes/folder.dart';
 import 'package:quotealine_holy/screens/quote_page.dart';
 
@@ -31,45 +32,30 @@ class PostList extends StatefulWidget {
 class _PostListState extends State<PostList> {
   late Stream<QuerySnapshot> folderStream;
   late TextEditingController addFoldercontroller;
-  late String routeToFolderCollection;
+  late int folderCount;
+  late List<DocumentSnapshot> currentUserFoldersSnaps;
+  final String routeToFolderCollection = "folders";
 
   @override
   void initState() {
     super.initState();
-    _filterStreamByFavTags();
+    _filterUserFolders();
   }
 
 /*------------------------------------METHODS---------------------------------*/
 
-  // filters posts by a user's faved tags
-  /* Stream<QuerySnapshot> */ _filterStreamByFavTags() async {
-    //DocumentSnapshot self;
-
-    // if User is not logged in, they see an empty stream for the curated page
-    /*
-    if (widget.currUserID != null) {
-      self = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(widget.currUserID)
-          .get();
-    } else {
-      setState(() {
-        folderStream = Stream.empty();
-      });
-      return;
+  _filterUserFolders() async {
+    QuoteUser currentQuoteUser = QuoteUser.fromMap({}); //Could Cause issues
+    currentQuoteUser = await currentQuoteUser.getUser(widget.currUserID);
+    List<DocumentReference> currentQuoteUserFoldersRefs =
+        currentQuoteUser.joinedFolders;
+    List<DocumentSnapshot> tempCurrentUserFoldersSnaps = [];
+    for (DocumentReference fid in currentQuoteUser.joinedFolders) {
+      tempCurrentUserFoldersSnaps.add(await fid.get());
     }
-*/
-    //Map<String, String> favTags = Map<String, String>.from(self['favTags']);
-    //List<String> keysFavTags = favTags.keys.toList();
 
-    // if the user has no favorite tags, the FOR YOU page is empty
-    //if (keysFavTags.isEmpty) return Stream.empty();
-
-    // otherwise, use the current users faved tags to filter for posts that contain
-    // corresponding tagIDs
     Stream<QuerySnapshot> filteredStream =
         FirebaseFirestore.instance.collection('folders').snapshots();
-
     setState(() {
       folderStream = filteredStream;
     });
@@ -77,7 +63,7 @@ class _PostListState extends State<PostList> {
       addFoldercontroller = TextEditingController();
     });
     setState(() {
-      routeToFolderCollection = "folders";
+      currentUserFoldersSnaps = tempCurrentUserFoldersSnaps;
     });
   }
 
@@ -86,38 +72,7 @@ class _PostListState extends State<PostList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder<QuerySnapshot>(
-        stream: folderStream,
-        // stream: Firestore.instance.collection('posts').snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            if (snapshot.connectionState == ConnectionState.none ||
-                snapshot.connectionState == ConnectionState.waiting) {
-              return Container();
-            }
-            //     // return SizedBox(
-            //     //     width: 20, height: 20, child: CircularProgressIndicator());
-            //     return Center(
-            //     child: SpinKitFadingCube(
-            //       color: Colors.white,
-            //       size: 100.0,
-            //     ));
-            if (snapshot.connectionState == ConnectionState.done) {
-              return Container();
-            }
-            //   // return CircularProgressIndicator();
-            //   return Center(
-            //     child: SpinKitFadingCube(
-            //       color: Colors.white,
-            //       size: 50.0,
-            //     ));
-          } else if (snapshot.hasError) {
-            // return Text("${snapshot.error}");
-            return Container();
-          }
-          return _buildList(context, snapshot.data!.docs);
-        },
-      ),
+      body: _buildList(context, currentUserFoldersSnaps),
       floatingActionButton: FloatingActionButton(
         onPressed: () => addFolderDialog(),
         tooltip: 'Add Folder',
@@ -138,19 +93,23 @@ class _PostListState extends State<PostList> {
         actions: [
           TextButton(
             child: const Text('Submit'),
-            onPressed: () => submitAddFolderDialog(addFoldercontroller.text),
+            onPressed: () => submitAddFolderDialog(
+                addFoldercontroller.text, widget.currUserID),
           )
         ],
       ),
     );
   }
 
-  submitAddFolderDialog(String folderName) async {
+  submitAddFolderDialog(String folderName, String creatorID) async {
+    Map<String, dynamic> initContents = {};
     Folder testFolder = Folder.fromMap({
-      'folderID': 'lovelyFolderID',
+      'folderID': 'tempID',
       'folderName': folderName,
-      'parentFolderID': 'lovelyParentFolderID',
-      'folderContents': testMap,
+      'parentFolderID': 'root',
+      'folderContents': initContents,
+      'memberUserIDs': [creatorID],
+      'adminIDs': [creatorID],
     });
     FirebaseFirestore.instance
         .collection(routeToFolderCollection)

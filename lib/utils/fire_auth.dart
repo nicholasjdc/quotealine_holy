@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:quotealine_holy/base_classes/folder.dart';
 import 'package:quotealine_holy/base_classes/quote_user.dart';
 
 class FireAuth {
@@ -16,14 +18,13 @@ class FireAuth {
         password: password,
       );
       user = userCredential.user;
+
       await user!.updateProfile(displayName: name);
       await user.reload();
-      await createQuoteUserWithEmailAndPassword({
-        'userID': user.uid,
-        'username': name,
-        'joinedFolders': [] as List<String>
-      });
+
       user = auth.currentUser;
+
+      await createQuoteUserWithEmailAndPassword(name);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
@@ -36,9 +37,30 @@ class FireAuth {
     return user;
   }
 
-  static Future<QuoteUser?> createQuoteUserWithEmailAndPassword(data) async {
-    QuoteUser currQuoteUser = QuoteUser.fromMap(data);
-    await currQuoteUser.addUser(currQuoteUser);
+  static Future<QuoteUser?> createQuoteUserWithEmailAndPassword(
+      username) async {
+    List<DocumentReference> initFolders = [];
+    QuoteUser currQuoteUser = QuoteUser.fromMap({
+      'userID': 'tempID',
+      'username': username,
+      'joinedFolders': initFolders
+    });
+
+    DocumentReference currQuoteUserDocRef =
+        await currQuoteUser.addUser(currQuoteUser);
+    Map<String, dynamic> personalFolderMap = {
+      'folderID': 'tempID',
+      'folderName': 'personal',
+      'parentFolderID': 'root',
+      'adminIDs': [currQuoteUserDocRef.id],
+      'memberUserIDs': [currQuoteUserDocRef.id]
+    };
+    Folder personalFolder = Folder.fromMap(personalFolderMap);
+    DocumentReference personalFolderRef =
+        await personalFolder.addFolder(personalFolder);
+    initFolders.add(personalFolderRef);
+    await currQuoteUserDocRef.update(
+        {'joinedFolders': initFolders, 'userID': currQuoteUserDocRef.id});
     return currQuoteUser;
   }
 

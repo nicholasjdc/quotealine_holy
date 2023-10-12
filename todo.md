@@ -43,8 +43,11 @@ Currently in Progress:
 - Creating folder screen x
 - Testing creation and display of folders x
 - Sync Quotes with Folders x
-- Sync Users with Folders
+- Sync Users with Folders x
+- add Timestamp to all classes
 - Enable more fields for quote creation
 - Prettify folders
 - Prettify quotes
+- Prettify login screen
+- Prettify Profile Screen
 - Deploy

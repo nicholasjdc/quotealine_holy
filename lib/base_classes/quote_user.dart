@@ -1,11 +1,10 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quotealine_holy/base_classes/base_model.dart';
 
 class QuoteUser implements BaseModel {
   String userID = '';
   String username = '';
-  List<String> joinedFolders = [];
+  List<DocumentReference> joinedFolders = [];
   QuoteUser.fromMap(Map<String, dynamic> map)
       : userID = map['userID'],
         username = map['username'],
@@ -21,10 +20,11 @@ class QuoteUser implements BaseModel {
 
   String routeToCollection = 'users';
 
-  Future<void> addUser(QuoteUser user) async {
+  Future<DocumentReference> addUser(QuoteUser user) async {
     DocumentReference docRef = await FirebaseFirestore.instance
         .collection(routeToCollection)
         .add(user.toMap());
+    return docRef;
   }
 
   Future<QuoteUser> getUser(String id) async {

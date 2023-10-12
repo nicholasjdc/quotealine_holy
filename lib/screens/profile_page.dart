@@ -20,10 +20,6 @@ class _ProfilePageState extends State<ProfilePage> {
   bool _isSigningOut = false;
 
   late User _currentUser;
-  QuoteUser testQuoteUser = QuoteUser.fromMap(
-      {'userID': 'abc', 'username': 'whatever', 'joinedFolders': []});
-  Quote testQuote = Quote.fromMap(
-      {'quoteID': 'lovelydays', 'quote': 'sadbad', 'parentFolderID': 'okokok'});
 
   @override
   void initState() {
@@ -137,11 +133,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => {testQuote.addQuote(testQuote)},
-        tooltip: 'Add Quote',
-        child: const Icon(Icons.add),
       ),
     );
   }

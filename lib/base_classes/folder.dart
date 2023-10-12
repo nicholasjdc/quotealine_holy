@@ -5,27 +5,38 @@ class Folder implements BaseModel {
   String folderID = '';
   String folderName = '';
   String parentFolderID = '';
-  Map<String, dynamic> initFolderContents = {};
+  List<String> adminIDs = [];
+  List<String> memberUserIDs = [];
+  //Map<String, dynamic> folderContents = {};
+  @override
   Folder.fromMap(Map<String, dynamic> map)
       : folderID = map['folderID'],
         folderName = map['folderName'],
-        parentFolderID = map['parentFolderID'];
+        parentFolderID = map['parentFolderID'],
+        memberUserIDs = map['memberUserIDs'],
+        adminIDs = map['adminIDs'];
+  //folderContents = map['foldercontents'];
   @override
   Map<String, dynamic> toMap() {
     return {
       'folderID': folderID,
       'folderName': folderName,
       'parentFolderID': parentFolderID,
+      'memberUserIDs': memberUserIDs,
+      'adminIDs': adminIDs,
+      //'folderContents': folderContents,
     };
   }
 
-  String routeToCollection = 'folders';
+  static String routeToCollection = 'folders';
 
-  Future<void> addFolder(Folder folder) async {
+  Future<DocumentReference> addFolder(Folder folder) async {
     DocumentReference docRef = await FirebaseFirestore.instance
         .collection(routeToCollection)
         .add(folder.toMap());
+    await docRef.update({'folderID': docRef.id});
     docRef.collection('quotes');
+    return docRef;
   }
 
   Future<Folder> getFolder(String id) async {
@@ -34,6 +45,25 @@ class Folder implements BaseModel {
         .doc(id)
         .get();
     return Folder.fromMap(snapshot.data as Map<String, dynamic>);
+  }
+
+  static Future<Folder> staticGetFolder(String id) async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection(routeToCollection)
+        .doc(id)
+        .get();
+    return Folder.fromMap(snapshot.data as Map<String, dynamic>);
+  }
+
+  static Future<DocumentReference> staticGetFolderRef(String id) async {
+    DocumentReference ref =
+        FirebaseFirestore.instance.collection(routeToCollection).doc(id);
+    return ref;
+  }
+
+  static Future<DocumentSnapshot> staticGetFolderSnap(String id) async {
+    DocumentReference ref = await staticGetFolderRef(id);
+    return ref.get();
   }
 
   Future<List<Folder>> getFolders() async {
