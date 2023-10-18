@@ -1,14 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:quotealine_holy/base_classes/quote_user.dart';
 import 'package:quotealine_holy/screens/folder_page.dart';
 import 'package:quotealine_holy/screens/login_page.dart';
 import 'package:quotealine_holy/utils/fire_auth.dart';
-import 'package:quotealine_holy/base_classes/quote.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
-
   const ProfilePage({super.key, required this.user});
 
   @override
@@ -67,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 onPressed: () => {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => FolderPage(_currentUser.uid),
+                          builder: (context) => FolderPage(_currentUser),
                         ),
                       )
                     },

@@ -2,28 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quotealine_holy/base_classes/quote_user.dart';
 import 'dart:async';
-import 'package:uuid/uuid.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:quotealine_holy/base_classes/folder.dart';
 import 'package:quotealine_holy/screens/quote_page.dart';
 
 class FolderPage extends StatelessWidget {
-  final String currUserID;
-  const FolderPage(this.currUserID, {super.key});
+  final User user;
+  const FolderPage(this.user, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return PostList(currUserID);
+    return PostList(user);
   }
 }
 
-Map<String, dynamic> testMap = {
-  'haha hoho': 'hehe haha',
-};
-
 // return a card template widget
 class PostList extends StatefulWidget {
-  final String currUserID;
-  const PostList(this.currUserID, {super.key});
+  final User user;
+  const PostList(this.user, {super.key});
 
   @override
   _PostListState createState() => _PostListState();
@@ -33,8 +29,9 @@ class _PostListState extends State<PostList> {
   late Stream<QuerySnapshot> folderStream;
   late TextEditingController addFoldercontroller;
   late int folderCount;
-  late List<DocumentSnapshot> currentUserFoldersSnaps;
+  List<DocumentSnapshot> currentUserFoldersSnaps = [];
   final String routeToFolderCollection = "folders";
+  final String routeToUserCollection = "users";
 
   @override
   void initState() {
@@ -45,26 +42,22 @@ class _PostListState extends State<PostList> {
 /*------------------------------------METHODS---------------------------------*/
 
   _filterUserFolders() async {
-    QuoteUser currentQuoteUser = QuoteUser.fromMap({}); //Could Cause issues
-    currentQuoteUser = await currentQuoteUser.getUser(widget.currUserID);
-    List<DocumentReference> currentQuoteUserFoldersRefs =
-        currentQuoteUser.joinedFolders;
+    print("USERID");
+    print(widget.user.uid);
+    QuoteUser currentQuoteUser = await QuoteUser.staticGetUser(widget.user.uid);
     List<DocumentSnapshot> tempCurrentUserFoldersSnaps = [];
-    for (DocumentReference fid in currentQuoteUser.joinedFolders) {
-      tempCurrentUserFoldersSnaps.add(await fid.get());
+    for (DocumentReference fRef in currentQuoteUser.joinedFolders) {
+      tempCurrentUserFoldersSnaps.add(await fRef.get());
+      print(fRef.id);
     }
 
-    Stream<QuerySnapshot> filteredStream =
-        FirebaseFirestore.instance.collection('folders').snapshots();
-    setState(() {
-      folderStream = filteredStream;
-    });
     setState(() {
       addFoldercontroller = TextEditingController();
     });
     setState(() {
       currentUserFoldersSnaps = tempCurrentUserFoldersSnaps;
     });
+    setState(() {});
   }
 
   /*--------------------------------------------------------------------------*/
@@ -94,7 +87,7 @@ class _PostListState extends State<PostList> {
           TextButton(
             child: const Text('Submit'),
             onPressed: () => submitAddFolderDialog(
-                addFoldercontroller.text, widget.currUserID),
+                addFoldercontroller.text, widget.user.uid),
           )
         ],
       ),
@@ -111,9 +104,17 @@ class _PostListState extends State<PostList> {
       'memberUserIDs': [creatorID],
       'adminIDs': [creatorID],
     });
-    FirebaseFirestore.instance
+    DocumentReference newFolderRef = await FirebaseFirestore.instance
         .collection(routeToFolderCollection)
-        .add(testFolder.toMap());
+        .add(testFolder.toMap()); //Create new folder in folder collection
+    FirebaseFirestore.instance
+        .collection(routeToUserCollection)
+        .doc(widget.user.uid)
+        .update({
+      "joinedFolders": FieldValue.arrayUnion([newFolderRef])
+    });
+    //.set({"joinedFolders": newFolderRef}, SetOptions(merge: true));
+    //Update User's list of folders
     Navigator.of(context).pop();
   }
 

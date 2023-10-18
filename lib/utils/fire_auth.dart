@@ -24,7 +24,7 @@ class FireAuth {
 
       user = auth.currentUser;
 
-      await createQuoteUserWithEmailAndPassword(name);
+      await createQuoteUserWithEmailAndPassword(name, user!.uid);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
@@ -38,13 +38,10 @@ class FireAuth {
   }
 
   static Future<QuoteUser?> createQuoteUserWithEmailAndPassword(
-      username) async {
+      username, String userID) async {
     List<DocumentReference> initFolders = [];
-    QuoteUser currQuoteUser = QuoteUser.fromMap({
-      'userID': 'tempID',
-      'username': username,
-      'joinedFolders': initFolders
-    });
+    QuoteUser currQuoteUser = QuoteUser.fromMap(
+        {'userID': userID, 'username': username, 'joinedFolders': initFolders});
 
     DocumentReference currQuoteUserDocRef =
         await currQuoteUser.addUser(currQuoteUser);

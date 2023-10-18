@@ -4,17 +4,20 @@ import 'package:quotealine_holy/base_classes/base_model.dart';
 class Quote implements BaseModel {
   String quoteID = '';
   String quote = '';
+  Timestamp dateCreated;
   String parentFolderID = '';
   Quote.fromMap(Map<String, dynamic> map)
       : quoteID = map['quoteID'],
         quote = map['quote'],
-        parentFolderID = map['parentFolderID'];
+        parentFolderID = map['parentFolderID'],
+        dateCreated = map['dateCreated'];
   @override
   Map<String, dynamic> toMap() {
     return {
       'quoteID': quoteID,
       'quote': quote,
       'parentFolderID': parentFolderID,
+      'dateCreated': dateCreated,
     };
   }
 

@@ -44,7 +44,10 @@ Currently in Progress:
 - Testing creation and display of folders x
 - Sync Quotes with Folders x
 - Sync Users with Folders x
-- add Timestamp to all classes
+- add Timestamps (creation) to Folder, User, and Quote
+
+- Allow Users to add other users to the folder
+- Allow Users to add Friends
 - Enable more fields for quote creation
 - Prettify folders
 - Prettify quotes

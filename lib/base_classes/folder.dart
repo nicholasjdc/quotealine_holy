@@ -7,6 +7,7 @@ class Folder implements BaseModel {
   String parentFolderID = '';
   List<String> adminIDs = [];
   List<String> memberUserIDs = [];
+  Timestamp dateCreated;
   //Map<String, dynamic> folderContents = {};
   @override
   Folder.fromMap(Map<String, dynamic> map)
@@ -14,7 +15,8 @@ class Folder implements BaseModel {
         folderName = map['folderName'],
         parentFolderID = map['parentFolderID'],
         memberUserIDs = map['memberUserIDs'],
-        adminIDs = map['adminIDs'];
+        adminIDs = map['adminIDs'],
+        dateCreated = map['dateCreated'];
   //folderContents = map['foldercontents'];
   @override
   Map<String, dynamic> toMap() {
@@ -24,6 +26,7 @@ class Folder implements BaseModel {
       'parentFolderID': parentFolderID,
       'memberUserIDs': memberUserIDs,
       'adminIDs': adminIDs,
+      'dateCreated': dateCreated,
       //'folderContents': folderContents,
     };
   }
@@ -44,7 +47,7 @@ class Folder implements BaseModel {
         .collection(routeToCollection)
         .doc(id)
         .get();
-    return Folder.fromMap(snapshot.data as Map<String, dynamic>);
+    return Folder.fromMap(snapshot.data() as Map<String, dynamic>);
   }
 
   static Future<Folder> staticGetFolder(String id) async {
@@ -52,7 +55,7 @@ class Folder implements BaseModel {
         .collection(routeToCollection)
         .doc(id)
         .get();
-    return Folder.fromMap(snapshot.data as Map<String, dynamic>);
+    return Folder.fromMap(snapshot.data() as Map<String, dynamic>);
   }
 
   static Future<DocumentReference> staticGetFolderRef(String id) async {
@@ -70,7 +73,7 @@ class Folder implements BaseModel {
     QuerySnapshot snapshot =
         await FirebaseFirestore.instance.collection(routeToCollection).get();
     return snapshot.docs
-        .map((doc) => Folder.fromMap(doc.data as Map<String, dynamic>))
+        .map((doc) => Folder.fromMap(doc.data() as Map<String, dynamic>))
         .toList();
   }
 
@@ -79,7 +82,7 @@ class Folder implements BaseModel {
         .collection(routeToCollection)
         .snapshots()
         .map((snapshot) => snapshot.docs
-            .map((doc) => Folder.fromMap(doc.data as Map<String, dynamic>))
+            .map((doc) => Folder.fromMap(doc.data() as Map<String, dynamic>))
             .toList());
   }
 
