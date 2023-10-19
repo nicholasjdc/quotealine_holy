@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:quotealine_holy/base_classes/folder.dart';
 import 'package:quotealine_holy/screens/folder_page.dart';
 import 'package:quotealine_holy/screens/login_page.dart';
 import 'package:quotealine_holy/utils/fire_auth.dart';
@@ -15,7 +17,10 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   bool _isSendingVerification = false;
   bool _isSigningOut = false;
-
+  final String routeToFolderCollection = "folders";
+  final String routeToUserCollection = "users";
+  TextEditingController addUserToFoldercontroller = TextEditingController();
+  TextEditingController addFriendController = TextEditingController();
   late User _currentUser;
 
   @override
@@ -71,14 +76,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: const Text('To FolderPage')),
             const SizedBox(height: 16.0),
             ElevatedButton(
-                onPressed: () => {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => FolderPage(_currentUser),
-                        ),
-                      )
-                    },
+                onPressed: () => addUserToFolderDialog(),
                 child: const Text('Join Group')),
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+                onPressed: () => addFriendDialog(),
+                child: const Text('Add Friend')),
             const SizedBox(height: 16.0),
             _isSendingVerification
                 ? const CircularProgressIndicator()
@@ -142,5 +145,86 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     );
+  }
+
+  addUserToFolderDialog() async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Please Enter FolderID"),
+        content: TextField(
+          decoration: const InputDecoration(hintText: "3P0dkjfK41"),
+          controller: addUserToFoldercontroller,
+        ),
+        actions: [
+          TextButton(
+            child: const Text('Submit'),
+            onPressed: () => submitAddUserToFolderDialog(
+                addUserToFoldercontroller.text, widget.user.uid),
+          )
+        ],
+      ),
+    );
+  }
+
+  submitAddUserToFolderDialog(String folderName, String userID) {
+    //Update folder MemberUserIDS
+    DocumentReference newFolderRef = FirebaseFirestore.instance
+        .collection(routeToFolderCollection)
+        .doc(folderName);
+    newFolderRef.update({
+      "memberUserIDs": FieldValue.arrayUnion([userID])
+    });
+
+    //update User joined Folders
+    FirebaseFirestore.instance
+        .collection(routeToUserCollection)
+        .doc(userID)
+        .update({
+      "joinedFolders": FieldValue.arrayUnion([newFolderRef])
+    });
+
+    Navigator.of(context).pop();
+  }
+
+  addFriendDialog() async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Please Enter FriendID"),
+        content: TextField(
+          decoration: const InputDecoration(hintText: "3P0dkjfK41"),
+          controller: addFriendController,
+        ),
+        actions: [
+          TextButton(
+            child: const Text('Submit'),
+            onPressed: () => submitAddFriendDialog(
+                addFriendController.text, widget.user.uid),
+          )
+        ],
+      ),
+    );
+  }
+
+  submitAddFriendDialog(String friendName, String userID) {
+    //Update folder MemberUserIDS
+    DocumentReference currUserRef = FirebaseFirestore.instance
+        .collection(routeToUserCollection)
+        .doc(userID);
+    DocumentReference friendUserRef = FirebaseFirestore.instance
+        .collection(routeToUserCollection)
+        .doc(friendName);
+
+    currUserRef.update({
+      "friends": FieldValue.arrayUnion([friendUserRef])
+    });
+
+    //update User joined Folders
+    friendUserRef.update({
+      "friends": FieldValue.arrayUnion([currUserRef])
+    });
+
+    Navigator.of(context).pop();
   }
 }

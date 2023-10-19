@@ -40,11 +40,13 @@ class FireAuth {
   static Future<QuoteUser?> createQuoteUserWithEmailAndPassword(
       username, String userID) async {
     List<DocumentReference> initFolders = [];
+    List<DocumentReference> initFriends = [];
     QuoteUser currQuoteUser = QuoteUser.fromMap({
       'userID': userID,
       'username': username,
       'joinedFolders': initFolders,
-      'dateCreated': Timestamp.now()
+      'dateCreated': Timestamp.now(),
+      'friends': initFriends,
     });
 
     DocumentReference currQuoteUserDocRef =

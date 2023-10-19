@@ -17,7 +17,7 @@ Architecture:
 
 Current Roadmap:
 1. Implement the ability to create and join Folders *** (FOLDER)
-2. Allow the ability to create quotes associated with folders *** (FOLDER, QUOTES)
+2. Allow the ability to create quotes associated with folders *** (FOLDER, QUOTES) x
     2.1. Quote fields: Folder (can only add to folder with which you are a member), quote content, speaker (maybe)
 3. Prettify the UI (PRETTIFICATION)
     3.1. QUOTES: with source set at bottom
@@ -46,9 +46,10 @@ Currently in Progress:
 - Sync Users with Folders x
 - add Timestamps (creation) to Folder, User, and Quote x
 - Security (obscurate UserInfo and FolderInfo)
+- Allow Users to Join Folders x
 - Allow Users to add other users to the folder
-- Allow Users to add Friends
-
+- Allow Users to add Friends x
+- Make Folder page a stream
 - Enable more fields for quote creation
 - Prettify folders
 - Prettify quotes

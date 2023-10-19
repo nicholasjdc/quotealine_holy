@@ -5,12 +5,16 @@ class QuoteUser implements BaseModel {
   String userID = '';
   String username = '';
   List<DocumentReference> joinedFolders = [];
+  List<DocumentReference> friends = [];
   Timestamp dateCreated;
   QuoteUser.fromMap(Map<String, dynamic> map)
       : userID = map['userID'],
         username = map['username'],
         dateCreated = map['dateCreated'],
         joinedFolders = ((map['joinedFolders'] as List)
+            .map((item) => item as DocumentReference)
+            .toList()),
+        friends = ((map['friends'] as List)
             .map((item) => item as DocumentReference)
             .toList());
 
@@ -21,6 +25,7 @@ class QuoteUser implements BaseModel {
       'username': username,
       'dateCreated': dateCreated,
       'joinedFolders': joinedFolders,
+      'friends': friends,
     };
   }
 
