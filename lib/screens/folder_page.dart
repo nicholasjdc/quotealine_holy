@@ -103,6 +103,7 @@ class _PostListState extends State<PostList> {
       'folderContents': initContents,
       'memberUserIDs': [creatorID],
       'adminIDs': [creatorID],
+      'dateCreated': Timestamp.now(),
     });
     DocumentReference newFolderRef = await FirebaseFirestore.instance
         .collection(routeToFolderCollection)

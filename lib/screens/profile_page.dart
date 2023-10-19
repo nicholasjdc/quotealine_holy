@@ -70,6 +70,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     },
                 child: const Text('To FolderPage')),
             const SizedBox(height: 16.0),
+            ElevatedButton(
+                onPressed: () => {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => FolderPage(_currentUser),
+                        ),
+                      )
+                    },
+                child: const Text('Join Group')),
+            const SizedBox(height: 16.0),
             _isSendingVerification
                 ? const CircularProgressIndicator()
                 : Row(

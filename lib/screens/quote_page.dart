@@ -31,37 +31,12 @@ class _PostListState extends State<PostList> {
   @override
   void initState() {
     super.initState();
-    _filterStreamByFavTags();
+    _filterQuoteStream();
   }
 
 /*------------------------------------METHODS---------------------------------*/
 
-  // filters posts by a user's faved tags
-  /* Stream<QuerySnapshot> */ _filterStreamByFavTags() async {
-    //DocumentSnapshot self;
-
-    // if User is not logged in, they see an empty stream for the curated page
-    /*
-    if (widget.currUserID != null) {
-      self = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(widget.currUserID)
-          .get();
-    } else {
-      setState(() {
-        quoteStream = Stream.empty();
-      });
-      return;
-    }
-*/
-    //Map<String, String> favTags = Map<String, String>.from(self['favTags']);
-    //List<String> keysFavTags = favTags.keys.toList();
-
-    // if the user has no favorite tags, the FOR YOU page is empty
-    //if (keysFavTags.isEmpty) return Stream.empty();
-
-    // otherwise, use the current users faved tags to filter for posts that contain
-    // corresponding tagIDs
+  _filterQuoteStream() async {
     Stream<QuerySnapshot> filteredStream = widget.cr.snapshots();
 
     setState(() {
@@ -86,24 +61,11 @@ class _PostListState extends State<PostList> {
                 snapshot.connectionState == ConnectionState.waiting) {
               return Container();
             }
-            //     // return SizedBox(
-            //     //     width: 20, height: 20, child: CircularProgressIndicator());
-            //     return Center(
-            //     child: SpinKitFadingCube(
-            //       color: Colors.white,
-            //       size: 100.0,
-            //     ));
+
             if (snapshot.connectionState == ConnectionState.done) {
               return Container();
             }
-            //   // return CircularProgressIndicator();
-            //   return Center(
-            //     child: SpinKitFadingCube(
-            //       color: Colors.white,
-            //       size: 50.0,
-            //     ));
           } else if (snapshot.hasError) {
-            // return Text("${snapshot.error}");
             return Container();
           }
           return _buildList(context, snapshot.data!.docs);
@@ -142,6 +104,7 @@ class _PostListState extends State<PostList> {
       'quoteID': 'lovelyFolderID',
       'quote': quoteContent,
       'parentFolderID': 'lovelyParentFolderID',
+      'dateCreated': Timestamp.now(),
     });
     widget.cr.add(testQuote.toMap());
     Navigator.of(context).pop();

@@ -40,8 +40,12 @@ class FireAuth {
   static Future<QuoteUser?> createQuoteUserWithEmailAndPassword(
       username, String userID) async {
     List<DocumentReference> initFolders = [];
-    QuoteUser currQuoteUser = QuoteUser.fromMap(
-        {'userID': userID, 'username': username, 'joinedFolders': initFolders});
+    QuoteUser currQuoteUser = QuoteUser.fromMap({
+      'userID': userID,
+      'username': username,
+      'joinedFolders': initFolders,
+      'dateCreated': Timestamp.now()
+    });
 
     DocumentReference currQuoteUserDocRef =
         await currQuoteUser.addUser(currQuoteUser);
@@ -50,7 +54,8 @@ class FireAuth {
       'folderName': 'personal',
       'parentFolderID': 'root',
       'adminIDs': [currQuoteUserDocRef.id],
-      'memberUserIDs': [currQuoteUserDocRef.id]
+      'memberUserIDs': [currQuoteUserDocRef.id],
+      'dateCreated': Timestamp.now(),
     };
     Folder personalFolder = Folder.fromMap(personalFolderMap);
     DocumentReference personalFolderRef =
