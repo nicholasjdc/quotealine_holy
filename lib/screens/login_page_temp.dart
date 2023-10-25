@@ -1,172 +1,175 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
 
-void main() => runApp(
-    MaterialApp(debugShowCheckedModeBanner: false, home: PrettyLoginPage()));
+void main() => runApp(MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: PrettyLoginPage(),
+    ));
 
-class PrettyLoginPage extends StatefulWidget {
-  @override
-  _PrettyLoginPageState createState() => _PrettyLoginPageState();
-}
-
-class _PrettyLoginPageState extends State<PrettyLoginPage> {
+class PrettyLoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              height: 400,
-              child: Stack(
-                children: <Widget>[
-                  Positioned(
-                    top: -40,
-                    height: 400,
-                    width: width,
-                    child: FadeInUp(
-                        duration: Duration(seconds: 1),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage(
-                                      'assets/images/background.png'),
-                                  fit: BoxFit.fill)),
-                        )),
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: 400,
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage('assets/images/background.png'),
+                          fit: BoxFit.fill)),
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned(
+                        left: 30,
+                        width: 80,
+                        height: 200,
+                        child: FadeInUp(
+                            duration: Duration(seconds: 1),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          'assets/images/light-1.png'))),
+                            )),
+                      ),
+                      Positioned(
+                        left: 140,
+                        width: 80,
+                        height: 150,
+                        child: FadeInUp(
+                            duration: Duration(milliseconds: 1200),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          'assets/images/light-2.png'))),
+                            )),
+                      ),
+                      Positioned(
+                        right: 40,
+                        top: 40,
+                        width: 80,
+                        height: 150,
+                        child: FadeInUp(
+                            duration: Duration(milliseconds: 1300),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          'assets/images/clock.png'))),
+                            )),
+                      ),
+                      Positioned(
+                        child: FadeInUp(
+                            duration: Duration(milliseconds: 1600),
+                            child: Container(
+                              margin: const EdgeInsets.only(top: 50),
+                              child: const Center(
+                                child: Text(
+                                  "Login",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 40,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            )),
+                      )
+                    ],
                   ),
-                  Positioned(
-                    height: 400,
-                    width: width + 20,
-                    child: FadeInUp(
-                        duration: Duration(milliseconds: 1000),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage(
-                                      'assets/images/background-2.png'),
-                                  fit: BoxFit.fill)),
-                        )),
-                  )
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  FadeInUp(
-                      duration: Duration(milliseconds: 1500),
-                      child: Text(
-                        "Login",
-                        style: TextStyle(
-                            color: Color.fromRGBO(49, 39, 79, 1),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30),
-                      )),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  FadeInUp(
-                      duration: Duration(milliseconds: 1700),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                            border: Border.all(
-                                color: Color.fromRGBO(196, 135, 198, .3)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color.fromRGBO(196, 135, 198, .3),
-                                blurRadius: 20,
-                                offset: Offset(0, 10),
-                              )
-                            ]),
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Color.fromRGBO(
-                                              196, 135, 198, .3)))),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Username",
-                                    hintStyle:
-                                        TextStyle(color: Colors.grey.shade700)),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(30.0),
+                  child: Column(
+                    children: <Widget>[
+                      FadeInUp(
+                          duration: Duration(milliseconds: 1800),
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                    color: Color.fromRGBO(143, 148, 251, 1)),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Color.fromRGBO(143, 148, 251, .2),
+                                      blurRadius: 20.0,
+                                      offset: Offset(0, 10))
+                                ]),
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  padding: EdgeInsets.all(8.0),
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Color.fromRGBO(
+                                                  143, 148, 251, 1)))),
+                                  child: TextField(
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: "Email or Phone number",
+                                        hintStyle:
+                                            TextStyle(color: Colors.grey[700])),
+                                  ),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: TextField(
+                                    obscureText: true,
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: "Password",
+                                        hintStyle:
+                                            TextStyle(color: Colors.grey[700])),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      FadeInUp(
+                          duration: Duration(milliseconds: 1900),
+                          child: Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                gradient: LinearGradient(colors: [
+                                  Color.fromRGBO(143, 148, 251, 1),
+                                  Color.fromRGBO(143, 148, 251, .6),
+                                ])),
+                            child: Center(
+                              child: Text(
+                                "Login",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              child: TextField(
-                                obscureText: true,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Password",
-                                    hintStyle:
-                                        TextStyle(color: Colors.grey.shade700)),
-                              ),
-                            )
-                          ],
-                        ),
-                      )),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  FadeInUp(
-                      duration: Duration(milliseconds: 1700),
-                      child: Center(
-                          child: TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                "Forgot Password?",
-                                style: TextStyle(
-                                    color: Color.fromRGBO(196, 135, 198, 1)),
-                              )))),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  FadeInUp(
-                      duration: Duration(milliseconds: 1900),
-                      child: MaterialButton(
-                        onPressed: () {},
-                        color: Color.fromRGBO(49, 39, 79, 1),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        height: 50,
-                        child: Center(
+                          )),
+                      SizedBox(
+                        height: 70,
+                      ),
+                      FadeInUp(
+                          duration: Duration(milliseconds: 2000),
                           child: Text(
-                            "Login",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      )),
-                  SizedBox(
-                    height: 30,
+                            "Forgot Password?",
+                            style: TextStyle(
+                                color: Color.fromRGBO(143, 148, 251, 1)),
+                          )),
+                    ],
                   ),
-                  FadeInUp(
-                      duration: Duration(milliseconds: 2000),
-                      child: Center(
-                          child: TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                "Create Account",
-                                style: TextStyle(
-                                    color: Color.fromRGBO(49, 39, 79, .6)),
-                              )))),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+                )
+              ],
+            ),
+          ),
+        ));
   }
 }
