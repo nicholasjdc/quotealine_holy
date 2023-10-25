@@ -97,7 +97,7 @@ class _PostListState extends State<PostList> {
           } else if (snapshot.hasError) {
             return Container();
           }
-          return _buildList(context, currentUserFoldersSnaps);
+          return _buildList(context, snapshot);
         },
       ),
       floatingActionButton: FloatingActionButton(

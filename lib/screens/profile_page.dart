@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:quotealine_holy/base_classes/folder.dart';
 import 'package:quotealine_holy/screens/folder_page.dart';
 import 'package:quotealine_holy/screens/login_page.dart';
+import 'package:quotealine_holy/screens/login_page_temp.dart';
 import 'package:quotealine_holy/utils/fire_auth.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -74,6 +75,16 @@ class _ProfilePageState extends State<ProfilePage> {
                       )
                     },
                 child: const Text('To FolderPage')),
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+                onPressed: () => {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => PrettyLoginPage(),
+                        ),
+                      )
+                    },
+                child: const Text('To temp_login_page')),
             const SizedBox(height: 16.0),
             ElevatedButton(
                 onPressed: () => addUserToFolderDialog(),
