@@ -1,12 +1,47 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:quotealine_holy/firebase_options.dart';
+import 'package:quotealine_holy/screens/profile_page.dart';
 
-void main() => runApp(MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: PrettyLoginPage(),
-    ));
+class LoginPageT extends StatefulWidget {
+  const LoginPageT({super.key});
 
-class PrettyLoginPage extends StatelessWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPageT> {
+  final _formKey = GlobalKey<FormState>();
+
+  final _emailTextController = TextEditingController();
+  final _passwordTextController = TextEditingController();
+
+  final _focusEmail = FocusNode();
+  final _focusPassword = FocusNode();
+
+  final bool _isProcessing = false;
+
+  Future<FirebaseApp> _initializeFirebase() async {
+    FirebaseApp firebaseApp = await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => ProfilePage(
+            user: user,
+          ),
+        ),
+      );
+    }
+
+    return firebaseApp;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +54,7 @@ class PrettyLoginPage extends StatelessWidget {
                   height: 400,
                   decoration: const BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage('assets/images/background.png'),
+                          image: AssetImage('images/background.png'),
                           fit: BoxFit.fill)),
                   child: Stack(
                     children: <Widget>[
@@ -28,12 +63,11 @@ class PrettyLoginPage extends StatelessWidget {
                         width: 80,
                         height: 200,
                         child: FadeInUp(
-                            duration: Duration(seconds: 1),
+                            duration: const Duration(seconds: 1),
                             child: Container(
                               decoration: const BoxDecoration(
                                   image: DecorationImage(
-                                      image: AssetImage(
-                                          'assets/images/light-1.png'))),
+                                      image: AssetImage('images/light-1.png'))),
                             )),
                       ),
                       Positioned(
@@ -41,12 +75,11 @@ class PrettyLoginPage extends StatelessWidget {
                         width: 80,
                         height: 150,
                         child: FadeInUp(
-                            duration: Duration(milliseconds: 1200),
+                            duration: const Duration(milliseconds: 1200),
                             child: Container(
                               decoration: const BoxDecoration(
                                   image: DecorationImage(
-                                      image: AssetImage(
-                                          'assets/images/light-2.png'))),
+                                      image: AssetImage('images/light-2.png'))),
                             )),
                       ),
                       Positioned(
@@ -55,22 +88,21 @@ class PrettyLoginPage extends StatelessWidget {
                         width: 80,
                         height: 150,
                         child: FadeInUp(
-                            duration: Duration(milliseconds: 1300),
+                            duration: const Duration(milliseconds: 1300),
                             child: Container(
                               decoration: const BoxDecoration(
                                   image: DecorationImage(
-                                      image: AssetImage(
-                                          'assets/images/clock.png'))),
+                                      image: AssetImage('images/clock.png'))),
                             )),
                       ),
                       Positioned(
                         child: FadeInUp(
-                            duration: Duration(milliseconds: 1600),
+                            duration: const Duration(milliseconds: 1600),
                             child: Container(
                               margin: const EdgeInsets.only(top: 50),
                               child: const Center(
                                 child: Text(
-                                  "Login",
+                                  "Quotealine",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 40,
@@ -83,19 +115,19 @@ class PrettyLoginPage extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(30.0),
+                  padding: const EdgeInsets.all(30.0),
                   child: Column(
                     children: <Widget>[
                       FadeInUp(
-                          duration: Duration(milliseconds: 1800),
+                          duration: const Duration(milliseconds: 1800),
                           child: Container(
-                            padding: EdgeInsets.all(5),
+                            padding: const EdgeInsets.all(5),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
-                                    color: Color.fromRGBO(143, 148, 251, 1)),
-                                boxShadow: [
+                                    color: const Color.fromRGBO(143, 148, 251, 1)),
+                                boxShadow: const [
                                   BoxShadow(
                                       color: Color.fromRGBO(143, 148, 251, .2),
                                       blurRadius: 20.0,
@@ -104,8 +136,8 @@ class PrettyLoginPage extends StatelessWidget {
                             child: Column(
                               children: <Widget>[
                                 Container(
-                                  padding: EdgeInsets.all(8.0),
-                                  decoration: BoxDecoration(
+                                  padding: const EdgeInsets.all(8.0),
+                                  decoration: const BoxDecoration(
                                       border: Border(
                                           bottom: BorderSide(
                                               color: Color.fromRGBO(
@@ -119,7 +151,7 @@ class PrettyLoginPage extends StatelessWidget {
                                   ),
                                 ),
                                 Container(
-                                  padding: EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.all(8.0),
                                   child: TextField(
                                     obscureText: true,
                                     decoration: InputDecoration(
@@ -132,34 +164,44 @@ class PrettyLoginPage extends StatelessWidget {
                               ],
                             ),
                           )),
-                      SizedBox(
+                      const SizedBox(
                         height: 30,
                       ),
                       FadeInUp(
-                          duration: Duration(milliseconds: 1900),
+                          duration: const Duration(milliseconds: 1900),
                           child: Container(
-                            height: 50,
+                            //height: 50,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                gradient: LinearGradient(colors: [
+                                gradient: const LinearGradient(colors: [
                                   Color.fromRGBO(143, 148, 251, 1),
                                   Color.fromRGBO(143, 148, 251, .6),
                                 ])),
-                            child: Center(
-                              child: Text(
-                                "Login",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
+                            child: const Center(
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                  Text(
+                                    "Login",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(height: 50),
+                                  Text(
+                                    "Register",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ])),
                           )),
-                      SizedBox(
+                      const SizedBox(
                         height: 70,
                       ),
                       FadeInUp(
-                          duration: Duration(milliseconds: 2000),
-                          child: Text(
+                          duration: const Duration(milliseconds: 2000),
+                          child: const Text(
                             "Forgot Password?",
                             style: TextStyle(
                                 color: Color.fromRGBO(143, 148, 251, 1)),

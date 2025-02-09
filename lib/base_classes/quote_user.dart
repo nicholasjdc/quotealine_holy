@@ -71,7 +71,7 @@ class QuoteUser implements BaseModel {
         .collection(routeToCollection)
         .snapshots()
         .map((snapshot) => snapshot.docs
-            .map((doc) => QuoteUser.fromMap(doc.data() as Map<String, dynamic>))
+            .map((doc) => QuoteUser.fromMap(doc.data()))
             .toList());
   }
 

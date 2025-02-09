@@ -49,6 +49,7 @@ Currently in Progress:
 - Allow Users to Join Folders x
 - Allow Users to add other users to the folder
 - Allow Users to add Friends x
+- Fill Temp Login screen with clickable buttons
 - Make Folder page a stream
 - Enable more fields for quote creation
 - Prettify folders

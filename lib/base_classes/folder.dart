@@ -82,7 +82,7 @@ class Folder implements BaseModel {
         .collection(routeToCollection)
         .snapshots()
         .map((snapshot) => snapshot.docs
-            .map((doc) => Folder.fromMap(doc.data() as Map<String, dynamic>))
+            .map((doc) => Folder.fromMap(doc.data()))
             .toList());
   }
 

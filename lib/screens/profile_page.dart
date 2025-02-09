@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:quotealine_holy/base_classes/folder.dart';
 import 'package:quotealine_holy/screens/folder_page.dart';
 import 'package:quotealine_holy/screens/login_page.dart';
 import 'package:quotealine_holy/screens/login_page_temp.dart';
@@ -80,7 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 onPressed: () => {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => PrettyLoginPage(),
+                          builder: (context) => const LoginPageT(),
                         ),
                       )
                     },
